@@ -251,8 +251,6 @@
   var CLIENT_ID = "xdvglzklefaxjrxge91afg0m9z2p7k";
 
   var SCOPES = "user:read:follows";
-  // Redirect must EXACTLY match one registered on your Twitch app.
-  // Normalize to always end in "/" so it matches the registered URL.
   var REDIRECT = location.origin + location.pathname.replace(/index\.html$/, "");
   if (!/\/$/.test(REDIRECT)) REDIRECT += "/";
 
@@ -260,10 +258,10 @@
   var LS_TOKEN = "jv_token";
   var LS_SIDEBAR = "jv_sidebar";
 
-  var channels = [];     // channel logins in the grid
-  var token = null;      // twitch oauth token
-  var me = null;         // logged-in user object
-  var follows = [];      // [{login,name,id,live,viewers,avatar}]
+  var channels = [];     
+  var token = null;      
+  var me = null;         
+  var follows = [];      
 
   var grid = document.getElementById("grid");
   var input = document.getElementById("channelInput");
@@ -696,7 +694,7 @@
   loadTwitch();
 })();
 
-// register the service worker (enables install + fast loads)
+// register the service worker
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", function () {
     navigator.serviceWorker.register("sw.js").catch(function () {});
