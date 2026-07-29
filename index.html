@@ -233,7 +233,6 @@
     <div class="toolbar">
       <span class="count" id="count">0 streams</span>
       <button id="installBtn" title="Install JustView as an app" style="display:none">Install</button>
-      <button class="ghost" id="copyBtn" title="Copy shareable link">Share</button>
       <button class="ghost" id="clearBtn" title="Remove all">Clear</button>
     </div>
   </header>
@@ -657,15 +656,6 @@
   });
   document.getElementById("clearBtn").addEventListener("click", function () {
     channels = []; saveState(); render();
-  });
-  document.getElementById("copyBtn").addEventListener("click", function () {
-    var url = location.href, btn = this;
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(url).then(function () {
-        var o = btn.textContent; btn.textContent = "Copied!";
-        setTimeout(function () { btn.textContent = o; }, 1200);
-      }, function () { prompt("Copy this link:", url); });
-    } else { prompt("Copy this link:", url); }
   });
 
   // ---------- installable app (PWA) ----------

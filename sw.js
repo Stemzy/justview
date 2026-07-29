@@ -1,6 +1,6 @@
 /* JustView service worker — caches the app shell so it installs and opens fast.
    Bump CACHE when you change the app so browsers pick up the new version. */
-const CACHE = "justview-v3";
+const CACHE = "justview-v4";
 const SHELL = [
   "./index.html",
   "./manifest.webmanifest",
