@@ -21,6 +21,7 @@
     --text: #efeff1;
     --muted: #adadb8;
     --gap: 8px;
+    --sidebar-w: 260px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; }
@@ -53,11 +54,22 @@
     white-space: nowrap;
   }
   .brand .dot { color: var(--purple); }
+  .hamburger {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text);
+    width: 36px; height: 36px;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    flex: none;
+  }
+  .hamburger:hover { background: var(--panel2); }
   form.add {
     display: flex;
     gap: 8px;
     flex: 1;
-    min-width: 240px;
+    min-width: 220px;
     max-width: 520px;
   }
   input[type="text"] {
@@ -94,6 +106,62 @@
   .toolbar { display: flex; gap: 8px; align-items: center; }
   .count { color: var(--muted); font-size: 13px; white-space: nowrap; }
 
+  /* Main = sidebar + grid */
+  .main { flex: 1; display: flex; min-height: 0; }
+
+  /* Sidebar */
+  #sidebar {
+    width: 0;
+    overflow: hidden;
+    background: var(--panel);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    transition: width .18s ease;
+    flex: none;
+  }
+  body.sb-open #sidebar { width: var(--sidebar-w); }
+  .sb-head {
+    padding: 12px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: var(--sidebar-w);
+  }
+  .sb-title { font-size: 12px; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); }
+  .sb-user { display: flex; align-items: center; gap: 8px; }
+  .sb-user img { width: 34px; height: 34px; border-radius: 50%; background: var(--panel2); }
+  .sb-user .u-name { font-weight: 700; font-size: 14px; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .sb-actions { display: flex; gap: 6px; }
+  .sb-actions button { flex: 1; padding: 7px 8px; font-size: 12px; }
+  .sb-note { font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .sb-note code { background: var(--panel2); color: var(--purple); padding: 1px 5px; border-radius: 4px; }
+  .sb-list { flex: 1; overflow-y: auto; min-width: var(--sidebar-w); }
+  .sb-row {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 8px 12px;
+    width: 100%;
+    border: 0;
+    background: none;
+    color: var(--text);
+    text-align: left;
+    cursor: pointer;
+    border-radius: 0;
+  }
+  .sb-row:hover { background: var(--panel2); }
+  .sb-row img { width: 30px; height: 30px; border-radius: 50%; background: var(--panel2); flex: none; }
+  .sb-row .r-main { flex: 1; min-width: 0; }
+  .sb-row .r-name { font-size: 13px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .sb-row .r-sub { font-size: 11px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .sb-row .r-live { color: #eb0400; font-weight: 700; }
+  .sb-row.added { background: rgba(145,71,255,.12); }
+  .sb-row .r-plus { color: var(--muted); font-size: 15px; flex: none; }
+  .sb-row.added .r-plus { color: var(--purple); }
+  .sb-empty { padding: 16px 12px; color: var(--muted); font-size: 13px; min-width: var(--sidebar-w); }
+
   /* Grid */
   #grid {
     flex: 1;
@@ -103,24 +171,10 @@
     overflow: auto;
     grid-auto-rows: 1fr;
   }
-  #grid.empty {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .placeholder {
-    text-align: center;
-    color: var(--muted);
-    max-width: 420px;
-    line-height: 1.6;
-  }
+  #grid.empty { display: flex; align-items: center; justify-content: center; }
+  .placeholder { text-align: center; color: var(--muted); max-width: 420px; line-height: 1.6; }
   .placeholder h2 { color: var(--text); margin-bottom: 8px; font-size: 20px; }
-  .placeholder code {
-    background: var(--panel2);
-    padding: 2px 6px;
-    border-radius: 4px;
-    color: var(--purple);
-  }
+  .placeholder code { background: var(--panel2); padding: 2px 6px; border-radius: 4px; color: var(--purple); }
 
   /* Tile */
   .tile {
@@ -135,13 +189,8 @@
   }
   .video-wrap { flex: 1; position: relative; min-width: 0; }
   .tile iframe { width: 100%; height: 100%; border: 0; display: block; }
-
   .tile:fullscreen, .tile:-webkit-full-screen { border: 0; border-radius: 0; }
-  .chat-wrap {
-    width: 300px;
-    border-left: 1px solid var(--border);
-    display: none;
-  }
+  .chat-wrap { width: 300px; border-left: 1px solid var(--border); display: none; }
   .tile.chat-on .chat-wrap { display: block; }
 
   .tile-bar {
@@ -158,12 +207,7 @@
     pointer-events: none;
   }
   .tile:hover .tile-bar { opacity: 1; pointer-events: auto; }
-  .tile-name {
-    font-weight: 700;
-    font-size: 13px;
-    text-shadow: 0 1px 2px rgba(0,0,0,.8);
-    margin-right: auto;
-  }
+  .tile-name { font-weight: 700; font-size: 13px; text-shadow: 0 1px 2px rgba(0,0,0,.8); margin-right: auto; }
   .tile-bar .icon {
     background: rgba(0,0,0,.55);
     border: none;
@@ -176,21 +220,11 @@
   }
   .tile-bar .icon:hover { background: var(--purple); }
   .tile-bar .icon.active { background: var(--purple); }
-  .badge-muted {
-    position: absolute;
-    bottom: 8px; left: 8px;
-    background: rgba(0,0,0,.7);
-    padding: 3px 7px;
-    border-radius: 4px;
-    font-size: 11px;
-    color: var(--muted);
-    z-index: 4;
-    pointer-events: none;
-  }
 </style>
 </head>
-<body>
+<body class="sb-open">
   <header>
+    <button class="hamburger" id="sbToggle" title="Toggle sidebar" aria-label="Toggle sidebar">☰</button>
     <div class="brand"><span class="dot">◧</span> JustView</div>
     <form class="add" id="addForm">
       <input type="text" id="channelInput" placeholder="Add a Twitch channel (e.g. shroud)" autocomplete="off" spellcheck="false">
@@ -204,32 +238,40 @@
     </div>
   </header>
 
-  <div id="grid" class="empty"></div>
+  <div class="main">
+    <aside id="sidebar">
+      <div class="sb-head" id="sbHead"><!-- filled by JS --></div>
+      <div class="sb-list" id="sbList"><!-- filled by JS --></div>
+    </aside>
+    <div id="grid" class="empty"></div>
+  </div>
 
 <script>
 (function () {
-  // Twitch requires the embedding domain. Works on localhost or any real host.
-  var PARENT = location.hostname || "localhost";
-  var channels = [];       // list of channel names (lowercase)
+  var CLIENT_ID = "xdvglzklefaxjrxge91afg0m9z2p7k";
+
+  var SCOPES = "user:read:follows";
+  // Redirect must EXACTLY match one registered on your Twitch app.
+  // Normalize to always end in "/" so it matches the registered URL.
+  var REDIRECT = location.origin + location.pathname.replace(/index\.html$/, "");
+  if (!/\/$/.test(REDIRECT)) REDIRECT += "/";
+
+  var LS_CHANNELS = "jv_channels";
+  var LS_TOKEN = "jv_token";
+  var LS_SIDEBAR = "jv_sidebar";
+
+  var channels = [];     // channel logins in the grid
+  var token = null;      // twitch oauth token
+  var me = null;         // logged-in user object
+  var follows = [];      // [{login,name,id,live,viewers,avatar}]
 
   var grid = document.getElementById("grid");
   var input = document.getElementById("channelInput");
   var countEl = document.getElementById("count");
+  var sbHead = document.getElementById("sbHead");
+  var sbList = document.getElementById("sbList");
 
-  // ---- URL state (shareable layout) ----
-  function loadFromURL() {
-    var p = new URLSearchParams(location.search);
-    var c = p.get("c");
-    if (c) channels = c.split(",").map(clean).filter(Boolean);
-    channels = dedupe(channels);
-  }
-  function saveToURL() {
-    var p = new URLSearchParams();
-    if (channels.length) p.set("c", channels.join(","));
-    var q = p.toString();
-    history.replaceState(null, "", q ? "?" + q : location.pathname);
-  }
-
+  // ---------- helpers ----------
   function clean(s) {
     return (s || "").trim().toLowerCase().replace(/^@/, "").replace(/[^a-z0-9_]/g, "");
   }
@@ -238,38 +280,57 @@
     arr.forEach(function (x) { if (x && !seen[x]) { seen[x] = 1; out.push(x); } });
     return out;
   }
+  var PARENT = location.hostname || "localhost";
 
-  // ---- Grid sizing: pick columns for a roughly square layout ----
+  // ---------- state persistence (grid survives reloads) ----------
+  function saveState() {
+    try { localStorage.setItem(LS_CHANNELS, JSON.stringify(channels)); } catch (e) {}
+    var p = new URLSearchParams();
+    if (channels.length) p.set("c", channels.join(","));
+    var q = p.toString();
+    history.replaceState(null, "", q ? "?" + q : location.pathname);
+  }
+  function loadState() {
+    var p = new URLSearchParams(location.search);
+    var c = p.get("c");
+    if (c) {
+      channels = c.split(",").map(clean).filter(Boolean);
+    } else {
+      try {
+        var s = JSON.parse(localStorage.getItem(LS_CHANNELS) || "[]");
+        if (Array.isArray(s)) channels = s.map(clean).filter(Boolean);
+      } catch (e) {}
+    }
+    channels = dedupe(channels);
+  }
+
+  // ---------- grid ----------
   function columnsFor(n) {
     if (n <= 1) return 1;
-    if (n <= 2) return 2;
     if (n <= 4) return 2;
-    if (n <= 6) return 3;
     if (n <= 9) return 3;
-    if (n <= 12) return 4;
+    if (n <= 16) return 4;
     return Math.ceil(Math.sqrt(n));
   }
 
   function render() {
-    // Empty state
     if (channels.length === 0) {
       grid.className = "empty";
       grid.style.gridTemplateColumns = "";
       grid.innerHTML =
         '<div class="placeholder"><h2>No streams yet</h2>' +
-        'Type a Twitch channel name above and hit <code>Add</code>. ' +
-        'Add as many as you like </div>';
+        'Add a channel above, or open the sidebar (☰) and pick from who you follow. ' +
+        'Hit each stream’s ▶ to play, and use its ⛶ button to go fullscreen.</div>';
       updateCount();
+      renderSidebar();
       return;
     }
     grid.className = "";
     grid.style.gridTemplateColumns = "repeat(" + columnsFor(channels.length) + ", 1fr)";
-
     grid.innerHTML = "";
-    channels.forEach(function (ch) {
-      grid.appendChild(makeTile(ch));
-    });
+    channels.forEach(function (ch) { grid.appendChild(makeTile(ch)); });
     updateCount();
+    renderSidebar();
   }
 
   function makeTile(ch) {
@@ -277,41 +338,34 @@
     tile.className = "tile";
     tile.dataset.ch = ch;
 
-    // video — loads muted so it can autoplay; hit the player's ▶ / volume to control it
     var vwrap = document.createElement("div");
     vwrap.className = "video-wrap";
     var vf = document.createElement("iframe");
     vf.src = "https://player.twitch.tv/?channel=" + encodeURIComponent(ch) +
-             "&parent=" + encodeURIComponent(PARENT) +
-             "&muted=true&autoplay=true";
+             "&parent=" + encodeURIComponent(PARENT) + "&muted=true&autoplay=true";
     vf.allowFullscreen = true;
     vf.setAttribute("allow", "autoplay; fullscreen");
     vwrap.appendChild(vf);
     tile.appendChild(vwrap);
 
-    // chat (hidden until toggled)
     var cwrap = document.createElement("div");
     cwrap.className = "chat-wrap";
     tile.appendChild(cwrap);
 
-    // control bar
     var bar = document.createElement("div");
     bar.className = "tile-bar";
-
     var name = document.createElement("span");
     name.className = "tile-name";
     name.textContent = ch;
     bar.appendChild(name);
 
-    // fullscreen button (top-right)
-    var fsBtn = iconBtn("⛶", false, "Fullscreen (Esc to exit)");
+    var fsBtn = iconBtn("⛶", "Fullscreen (Esc to exit)");
     fsBtn.addEventListener("click", function () {
       if (isFullscreen(tile)) exitFullscreen(); else requestFullscreen(tile);
     });
     bar.appendChild(fsBtn);
 
-    // chat toggle button
-    var chatBtn = iconBtn("💬", false, "Toggle chat");
+    var chatBtn = iconBtn("💬", "Toggle chat");
     chatBtn.addEventListener("click", function () {
       var on = tile.classList.toggle("chat-on");
       chatBtn.classList.toggle("active", on);
@@ -326,16 +380,21 @@
     });
     bar.appendChild(chatBtn);
 
-    // remove button
-    var closeBtn = iconBtn("✕", false, "Remove");
-    closeBtn.addEventListener("click", function () {
-      channels = channels.filter(function (x) { return x !== ch; });
-      saveToURL(); render();
-    });
+    var closeBtn = iconBtn("✕", "Remove");
+    closeBtn.addEventListener("click", function () { removeChannel(ch); });
     bar.appendChild(closeBtn);
 
     tile.appendChild(bar);
     return tile;
+  }
+
+  function iconBtn(label, title) {
+    var b = document.createElement("button");
+    b.className = "icon";
+    b.textContent = label;
+    b.title = title;
+    b.type = "button";
+    return b;
   }
 
   function isFullscreen(el) {
@@ -350,82 +409,291 @@
     if (fn) { try { fn.call(document); } catch (e) {} }
   }
 
-  function iconBtn(label, active, title) {
-    var b = document.createElement("button");
-    b.className = "icon" + (active ? " active" : "");
-    b.textContent = label;
-    b.title = title;
-    b.type = "button";
-    return b;
-  }
-
   function updateCount() {
     countEl.textContent = channels.length + (channels.length === 1 ? " stream" : " streams");
   }
 
   function addChannel(raw) {
     var ch = clean(raw);
-    if (!ch) return;
-    if (channels.indexOf(ch) !== -1) return;   // no dupes
+    if (!ch || channels.indexOf(ch) !== -1) return;
     channels.push(ch);
-    saveToURL(); render();
+    saveState(); render();
+  }
+  function removeChannel(ch) {
+    channels = channels.filter(function (x) { return x !== ch; });
+    saveState(); render();
+  }
+  function toggleChannel(ch) {
+    if (channels.indexOf(ch) === -1) addChannel(ch); else removeChannel(ch);
   }
 
-  // ---- events ----
+  // ---------- Twitch OAuth (browser-only implicit flow) ----------
+  function login() {
+    if (!CLIENT_ID) { alert("No Twitch Client ID set yet. Paste it near the top of index.html."); return; }
+    var u = "https://id.twitch.tv/oauth2/authorize?client_id=" + encodeURIComponent(CLIENT_ID) +
+            "&redirect_uri=" + encodeURIComponent(REDIRECT) +
+            "&response_type=token&scope=" + encodeURIComponent(SCOPES);
+    location.href = u;
+  }
+  function logout() {
+    token = null; me = null; follows = [];
+    try { localStorage.removeItem(LS_TOKEN); } catch (e) {}
+    renderSidebar();
+  }
+  function captureToken() {
+    var frag = new URLSearchParams((location.hash || "").replace(/^#/, ""));
+    var query = new URLSearchParams(location.search || "");
+    // Twitch sends errors back as ?error=... or #error=...
+    var err = frag.get("error") || query.get("error");
+    if (err) {
+      var desc = (frag.get("error_description") || query.get("error_description") || "").replace(/\+/g, " ");
+      alert("Twitch login failed:\n" + err + (desc ? "\n\n" + desc : "") +
+            "\n\nRedirect this app used:\n" + REDIRECT +
+            "\n\nMake sure that exact URL is in your Twitch app's OAuth Redirect URLs.");
+      history.replaceState(null, "", location.pathname + location.search.replace(/[?&]error[^&]*/g, ""));
+      return;
+    }
+    var t = frag.get("access_token");
+    if (t) {
+      token = t;
+      try { localStorage.setItem(LS_TOKEN, t); } catch (e) {}
+      history.replaceState(null, "", location.pathname + location.search); // strip token from URL
+    } else {
+      try { token = localStorage.getItem(LS_TOKEN) || null; } catch (e) {}
+    }
+  }
+
+  function tw(path) {
+    return fetch("https://api.twitch.tv/helix/" + path, {
+      headers: { "Client-Id": CLIENT_ID, "Authorization": "Bearer " + token }
+    }).then(function (r) {
+      if (r.status === 401) { logout(); throw new Error("auth expired"); }
+      return r.json();
+    });
+  }
+
+  function batchGet(path, key, ids) {
+    var chunks = [];
+    for (var i = 0; i < ids.length; i += 100) chunks.push(ids.slice(i, i + 100));
+    return Promise.all(chunks.map(function (c) {
+      var q = c.map(function (id) { return key + "=" + encodeURIComponent(id); }).join("&");
+      return tw(path + "?" + q).then(function (d) { return d.data || []; });
+    })).then(function (res) { return [].concat.apply([], res); });
+  }
+
+  function loadFollowsPaged(userId, all, cursor) {
+    all = all || [];
+    var url = "channels/followed?user_id=" + userId + "&first=100" + (cursor ? "&after=" + cursor : "");
+    return tw(url).then(function (d) {
+      all = all.concat(d.data || []);
+      if (d.pagination && d.pagination.cursor && (d.data || []).length) {
+        return loadFollowsPaged(userId, all, d.pagination.cursor);
+      }
+      return all;
+    });
+  }
+
+  function loadTwitch() {
+    if (!token || !CLIENT_ID) return;
+    tw("users").then(function (d) {
+      me = (d.data && d.data[0]) || null;
+      renderSidebar();
+      if (!me) return;
+      return loadFollowsPaged(me.id).then(function (raw) {
+        follows = raw.map(function (x) {
+          return { login: x.broadcaster_login, name: x.broadcaster_name, id: x.broadcaster_id,
+                   live: false, viewers: 0, avatar: "" };
+        });
+        renderSidebar();
+        enrich(follows);
+      });
+    }).catch(function (e) {
+      if (e && e.message !== "auth expired") {
+        console.error("JustView Twitch load error:", e);
+      }
+    });
+  }
+
+  function enrich(list) {
+    if (!list.length) return;
+    var ids = list.map(function (x) { return x.id; });
+    batchGet("streams", "user_id", ids).then(function (streams) {
+      var m = {};
+      streams.forEach(function (s) { m[s.user_id] = s.viewer_count; });
+      list.forEach(function (x) { if (x.id in m) { x.live = true; x.viewers = m[x.id]; } });
+      renderSidebar();
+    }).catch(function () {});
+    batchGet("users", "id", ids).then(function (users) {
+      var a = {};
+      users.forEach(function (u) { a[u.id] = u.profile_image_url; });
+      list.forEach(function (x) { x.avatar = a[x.id] || ""; });
+      renderSidebar();
+    }).catch(function () {});
+  }
+
+  // ---------- sidebar rendering ----------
+  function fmtViewers(n) {
+    if (n >= 1000) return (n / 1000).toFixed(n >= 10000 ? 0 : 1) + "K";
+    return String(n);
+  }
+
+  function renderSidebar() {
+    // header
+    sbHead.innerHTML = "";
+    var title = document.createElement("div");
+    title.className = "sb-title";
+    title.textContent = "Following";
+    sbHead.appendChild(title);
+
+    if (!CLIENT_ID) {
+      var note = document.createElement("div");
+      note.className = "sb-note";
+      note.innerHTML = "Twitch login isn’t set up yet. Paste your <code>Client ID</code> near the top of <code>index.html</code> to enable your followed-channels list.";
+      sbHead.appendChild(note);
+    } else if (!token || !me) {
+      var connect = document.createElement("button");
+      connect.textContent = "Connect Twitch";
+      connect.addEventListener("click", login);
+      sbHead.appendChild(connect);
+    } else {
+      var user = document.createElement("div");
+      user.className = "sb-user";
+      var img = document.createElement("img");
+      img.src = me.profile_image_url || "icon-192.png";
+      img.alt = "";
+      var nm = document.createElement("div");
+      nm.className = "u-name";
+      nm.textContent = me.display_name || me.login;
+      user.appendChild(img); user.appendChild(nm);
+      sbHead.appendChild(user);
+
+      var actions = document.createElement("div");
+      actions.className = "sb-actions";
+      var refresh = document.createElement("button");
+      refresh.className = "ghost"; refresh.textContent = "Refresh";
+      refresh.addEventListener("click", function () { loadTwitch(); });
+      var out = document.createElement("button");
+      out.className = "ghost"; out.textContent = "Log out";
+      out.addEventListener("click", logout);
+      actions.appendChild(refresh); actions.appendChild(out);
+      sbHead.appendChild(actions);
+    }
+
+    // list
+    sbList.innerHTML = "";
+    if (!token || !me) {
+      if (CLIENT_ID) {
+        var e = document.createElement("div");
+        e.className = "sb-empty";
+        e.textContent = "Connect your Twitch account to see who you follow here.";
+        sbList.appendChild(e);
+      }
+      return;
+    }
+    if (!follows.length) {
+      var e2 = document.createElement("div");
+      e2.className = "sb-empty";
+      e2.textContent = "Loading your follows…";
+      sbList.appendChild(e2);
+      return;
+    }
+
+    // live first (by viewers), then offline A–Z
+    var sorted = follows.slice().sort(function (a, b) {
+      if (a.live !== b.live) return a.live ? -1 : 1;
+      if (a.live && b.live) return b.viewers - a.viewers;
+      return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
+    });
+
+    sorted.forEach(function (f) {
+      var inGrid = channels.indexOf(f.login) !== -1;
+      var row = document.createElement("button");
+      row.className = "sb-row" + (inGrid ? " added" : "");
+      row.title = inGrid ? "Remove from grid" : "Add to grid";
+
+      var img = document.createElement("img");
+      img.src = f.avatar || "icon-192.png";
+      img.alt = "";
+      row.appendChild(img);
+
+      var main = document.createElement("div");
+      main.className = "r-main";
+      var rn = document.createElement("div");
+      rn.className = "r-name";
+      rn.textContent = f.name || f.login;
+      var rs = document.createElement("div");
+      rs.className = "r-sub";
+      if (f.live) rs.innerHTML = '<span class="r-live">● LIVE</span> · ' + fmtViewers(f.viewers) + " viewers";
+      else rs.textContent = "offline";
+      main.appendChild(rn); main.appendChild(rs);
+      row.appendChild(main);
+
+      var plus = document.createElement("span");
+      plus.className = "r-plus";
+      plus.textContent = inGrid ? "✓" : "+";
+      row.appendChild(plus);
+
+      row.addEventListener("click", function () { toggleChannel(f.login); });
+      sbList.appendChild(row);
+    });
+  }
+
+  // ---------- sidebar open/close ----------
+  function initSidebar() {
+    var saved = null;
+    try { saved = localStorage.getItem(LS_SIDEBAR); } catch (e) {}
+    var open = saved === null ? (window.innerWidth > 760) : (saved === "1");
+    document.body.classList.toggle("sb-open", open);
+    document.getElementById("sbToggle").addEventListener("click", function () {
+      var isOpen = document.body.classList.toggle("sb-open");
+      try { localStorage.setItem(LS_SIDEBAR, isOpen ? "1" : "0"); } catch (e) {}
+    });
+  }
+
+  // ---------- toolbar ----------
   document.getElementById("addForm").addEventListener("submit", function (e) {
     e.preventDefault();
-    // allow comma/space separated bulk add
     input.value.split(/[,\s]+/).forEach(addChannel);
     input.value = "";
     input.focus();
   });
-
   document.getElementById("clearBtn").addEventListener("click", function () {
-    channels = []; saveToURL(); render();
+    channels = []; saveState(); render();
   });
-
   document.getElementById("copyBtn").addEventListener("click", function () {
-    var url = location.href;
+    var url = location.href, btn = this;
     if (navigator.clipboard) {
       navigator.clipboard.writeText(url).then(function () {
-        flash(document.getElementById("copyBtn"), "Copied!");
+        var o = btn.textContent; btn.textContent = "Copied!";
+        setTimeout(function () { btn.textContent = o; }, 1200);
       }, function () { prompt("Copy this link:", url); });
-    } else {
-      prompt("Copy this link:", url);
-    }
+    } else { prompt("Copy this link:", url); }
   });
 
-  function flash(btn, text) {
-    var old = btn.textContent;
-    btn.textContent = text;
-    setTimeout(function () { btn.textContent = old; }, 1200);
-  }
-
-  // ---- boot ----
-  loadFromURL();
-  render();
-
-  // ---- installable app (PWA) ----
+  // ---------- installable app (PWA) ----------
   var installBtn = document.getElementById("installBtn");
   var deferredPrompt = null;
   window.addEventListener("beforeinstallprompt", function (e) {
-    e.preventDefault();
-    deferredPrompt = e;
+    e.preventDefault(); deferredPrompt = e;
     if (installBtn) installBtn.style.display = "inline-block";
   });
-  if (installBtn) {
-    installBtn.addEventListener("click", function () {
-      if (!deferredPrompt) return;
-      deferredPrompt.prompt();
-      deferredPrompt.userChoice.finally(function () {
-        deferredPrompt = null;
-        installBtn.style.display = "none";
-      });
+  if (installBtn) installBtn.addEventListener("click", function () {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.finally(function () {
+      deferredPrompt = null; installBtn.style.display = "none";
     });
-  }
+  });
   window.addEventListener("appinstalled", function () {
     if (installBtn) installBtn.style.display = "none";
   });
+
+  // ---------- boot ----------
+  initSidebar();
+  captureToken();
+  loadState();
+  render();
+  loadTwitch();
 })();
 
 // register the service worker (enables install + fast loads)
